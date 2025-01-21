@@ -1,1 +1,61 @@
-这是一个二叉树中序遍历的栈解法
+一个二叉树中序遍历的栈解法
+建立一个空的栈来临时存储遍历到的树节点。从根节点开始，向左开始遍历，每遍历到一个新的左节点便加入其到栈中，直到其左叶子节点，开始从栈中取节点出来，并将其加入到返回值中。
+然后开始检查当前节点是否有右孩子，有则开始从右孩子开始从头开始的操作，即遍历并且添加新左孩子到栈，以当前节点为根节点的最左叶子节点，并增加返回值。直到整个树都被遍历完成。
+
+A solution of stack
+First, I will build a new empty stack to temporatly store the node that we are traversing. Since it is inorder traversal, so I will continue to add left node 
+into the stack until reached the left leaf of the tree, and then I will pop node from the stack, and see if there is right node to check. And then repeat the 
+whole process until the whole tree is being traversed;
+
+栈与递归的相关转换性的思考：
+递归的主要代码为：
+if(root == null) {
+   return;
+}
+//此相当于栈的最外层循环条件：while(root != null || !stack.isEmpty())
+//即当当前树还未遍历完，或者当前递归/栈还未结束/空时，遍历继续，栈可被当做递归中暂时存储的上一层数据
+inorder(root.left);
+//此为当前节点不为空时，向左深处遍历
+ret.add(root.val);
+//当遍历到头(左叶子）开始加入到返回值当中。即在栈中为，当遍历到头时，从栈中拿出一个节点加入到返回值当中
+inorder(root.right);
+//最后检查右节点的状况，并且把当前节点当做新一轮的根节点进行重新操作
+
+
+
+
+/**
+ * Definition of TreeNode:
+ * public class TreeNode {
+ *     public int val;
+ *     public TreeNode left, right;
+ *     public TreeNode(int val) {
+ *         this.val = val;
+ *         this.left = this.right = null;
+ *     }
+ * }
+ */
+
+public class Solution {
+    /**
+     * @param root: A Tree
+     * @return: Inorder in ArrayList which contains node values.
+     */
+    public List<Integer> inorderTraversal(TreeNode root) {
+        // write your code here
+        List<Integer> ret = new ArrayList<>();
+        Stack<TreeNode> st = new Stack<>();
+        while (root != null || !st.isEmpty()) {
+            if (root != null) {
+                st.push(root);
+                root = root.left;
+            }
+            else if (root == null) {
+                root = st.pop();
+                ret.add(root.val);
+                root = root.right;
+            }
+        }
+        return ret;
+    }
+}
