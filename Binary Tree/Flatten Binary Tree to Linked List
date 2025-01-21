@@ -1,0 +1,44 @@
+额外空间为o1的递归算法
+因为需要以前序遍历的顺序进行展开。总体思路大致是，将当前节点的右子树链接到当前节点的左子树的最右叶子的右孩子上面。也就是说，根据前序遍历，
+右节点的上一个节点是左子树的最右叶子节点。所以得从最右节点开始，将最右节点连接到它的前序节点上面，再将前序节点变换到它的前序节点的右子树
+位置，并且将左子树置为空。
+
+A recursive method, extra space is o1
+Because it is expanded by preorder. The main precedure is, the right subtree is in the next order of the left subtree's leftmost
+leaf, so we only need to find the predecessor node of the current node, for right node is the left node, and left node is the root
+node. So every time when we find the predecessor node of the current node, we will set the right subtree as the next node and set
+the left subtree as null.
+
+/**
+ * Definition of TreeNode:
+ * public class TreeNode {
+ *     public int val;
+ *     public TreeNode left, right;
+ *     public TreeNode(int val) {
+ *         this.val = val;
+ *         this.left = this.right = null;
+ *     }
+ * }
+ */
+
+public class Solution {
+    /**
+     * @param root: a TreeNode, the root of the binary tree
+     * @return: nothing
+     */
+    TreeNode lastNode = null;
+    public void flatten(TreeNode root) {
+        // write your code here
+        if (root == null) {
+            return;
+        }
+        flatten(root.right);
+        flatten(root.left);
+
+        root.right = lastNode;
+        root.left = null;
+        lastNode = root;
+    }
+}
+
+
